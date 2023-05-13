@@ -12,13 +12,14 @@
 		<link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png"/>
 		<link id="98_css" href="%PUBLIC_URL%/css/98.css" rel="stylesheet">
 		<link id="xp_css" href="%PUBLIC_URL%/css/xp.css" rel="stylesheet">
+		<link id="7_css" href="%PUBLIC_URL%/css/7.css" rel="stylesheet">
 		<link href="%PUBLIC_URL%/css/resizable.css" rel="stylesheet">
 		<link href="%PUBLIC_URL%/css/output.css" rel="stylesheet">
 
 		<script>
 			for (let stylesheet of document.styleSheets) {
-                if (stylesheet.ownerNode.id === "xp_css") {
-                    stylesheet.disabled = true;
+                if (stylesheet.ownerNode.id) {
+                    stylesheet.disabled = stylesheet.ownerNode.id !== "98_css";
 				}
 			}
 		</script>

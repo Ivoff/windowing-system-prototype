@@ -45,20 +45,27 @@ const Resizer = ({ onResize }: ResizerProps): ReactElement => {
 	}
 
 	const handleMouseMove = (event: MouseEvent) => {
+		window.getSelection()?.empty();
 		if (direction !== "")
 			onResize(direction, event.movementX, event.movementY);
 	}
 
 	return (
 		<div>
-			<div className="top-left" onMouseDown={() => handleMouseDown(Direction.TopLeft)}></div>
-			<div className="top" onMouseDown={() => handleMouseDown(Direction.Top)}></div>
+			<div className="top-left" onMouseDown={(e) => {
+				handleMouseDown(Direction.TopLeft);
+			}}></div>
+			<div className="top" onMouseDown={(e) => {
+				handleMouseDown(Direction.Top)
+			}}></div>
 			<div className="top-right" onMouseDown={() => handleMouseDown(Direction.TopRight)}></div>
 			<div className="right" onMouseDown={() => handleMouseDown(Direction.Right)}></div>
 			<div className="left" onMouseDown={() => handleMouseDown(Direction.Left)}></div>
 			<div className="bottom-left" onMouseDown={() => handleMouseDown(Direction.BottomLeft)}></div>
 			<div className="bottom" onMouseDown={() => handleMouseDown(Direction.Bottom)}></div>
-			<div className="bottom-right" onMouseDown={() => handleMouseDown(Direction.BottomRight)}></div>
+			<div className="bottom-right" onMouseDown={(e) => {
+				handleMouseDown(Direction.BottomRight)
+			}}></div>
 		</div>
 	);
 }

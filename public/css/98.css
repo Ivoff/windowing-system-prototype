@@ -188,7 +188,7 @@ button::-moz-focus-inner, input[type=reset]::-moz-focus-inner, input[type=submit
 }
 
 .window-body {
-    padding: 8px;
+    margin: 8px;
 }
 
 fieldset {

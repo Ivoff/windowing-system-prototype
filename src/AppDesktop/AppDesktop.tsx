@@ -1,5 +1,4 @@
-import {ReactElement, ReactNode} from "react";
-import AppWindow from "./AppWindow/AppWindow";
+import {Dispatch, ReactElement, ReactNode, SetStateAction, useEffect} from "react";
 
 type AppDesktopProps = {
 	children?: ReactNode
@@ -7,7 +6,7 @@ type AppDesktopProps = {
 
 function AppDesktop({ children }: AppDesktopProps): ReactElement {
 	return (
-		<div className="bg-teal-700 grow overflow-y-hidden overflow-x-hidden">
+		<div id="desktop" className="bg-teal-700 grow overflow-y-hidden overflow-x-hidden">
 			{children}
 		</div>
 	);

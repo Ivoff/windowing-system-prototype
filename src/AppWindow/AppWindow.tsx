@@ -15,6 +15,13 @@ type AppWindowProps = {
 	children?: ReactNode
 }
 
+type DesktopBounds = {
+	x: number,
+	y: number,
+	width: number,
+	height: number
+}
+
 function AppWindow(
 	{
 		titleBarText,
@@ -25,11 +32,14 @@ function AppWindow(
 		minWidth = 200,
 		children
 	}: AppWindowProps
-	): ReactElement {
+): ReactElement {
 	const thisRef = useRef<HTMLDivElement>(null);
 	const windowBodyRef = useRef<HTMLDivElement>(null);
+	const statusBarRef = useRef<HTMLDivElement>(null);
+	let desktopBounds: DesktopBounds;
 
 	useEffect(() => {
+		desktopBounds = document.getElementById("desktop")?.getBoundingClientRect() as DOMRect;
 		checkInitialHeight();
 		updateWindowBodyHeight();
 	}, [])
@@ -52,7 +62,8 @@ function AppWindow(
 
 		const resizeTop = () => {
 			let newHeight = (height - movementY);
-			if (newHeight < minHeight)
+			let newTop = y + movementY;
+			if (newHeight < minHeight || !isInsideDesktopBounds({y: newTop}))
 				return;
 
 			appWindow.style.height = newHeight + "px";
@@ -61,7 +72,7 @@ function AppWindow(
 
 		const resizeRight = () => {
 			let newWidth = width + movementX;
-			if (newWidth < minWidth)
+			if (newWidth < minWidth || !isInsideDesktopBounds({width: newWidth}))
 				return;
 
 			appWindow.style.width = newWidth + "px";
@@ -69,16 +80,17 @@ function AppWindow(
 
 		const resizeLeft = () => {
 			let newWidth = width - movementX;
-			if (newWidth < minWidth)
+			let newLeft = x + movementX;
+			if (newWidth < minWidth || !isInsideDesktopBounds({x: newLeft}))
 				return;
 
 			appWindow.style.width = newWidth + "px";
-			appWindow.style.left = x + movementX + "px";
+			appWindow.style.left = newLeft + "px";
 		}
 
 		const resizeBottom = () => {
 			let newHeight = height + movementY;
-			if (newHeight < minHeight)
+			if (newHeight < minHeight || !isInsideDesktopBounds({height: newHeight}))
 				return;
 
 			appWindow.style.height = newHeight + "px";
@@ -88,38 +100,38 @@ function AppWindow(
 			case Direction.TopLeft:
 				resizeTop();
 				resizeLeft();
-			break;
+				break;
 
 			case Direction.Top:
 				resizeTop();
-			break;
+				break;
 
 			case Direction.TopRight:
 				resizeTop();
 				resizeRight();
-			break;
+				break;
 
 			case Direction.Left:
 				resizeLeft();
-			break;
+				break;
 
 			case Direction.Right:
 				resizeRight();
-			break;
+				break;
 
 			case Direction.BottomLeft:
 				resizeBottom();
 				resizeLeft();
-			break;
+				break;
 
 			case Direction.Bottom:
 				resizeBottom();
-			break;
+				break;
 
 			case Direction.BottomRight:
 				resizeBottom();
 				resizeRight();
-			break;
+				break;
 		}
 
 		updateWindowBodyHeight();
@@ -138,7 +150,7 @@ function AppWindow(
 				}
 
 				console.log(parts[0])
-				return(parseInt(parts[0].replace("px", "")));
+				return (parseInt(parts[0].replace("px", "")));
 			} else if (parts.length === 1)
 				return parseInt(parts[0].replace("px", ""));
 			else {
@@ -149,6 +161,7 @@ function AppWindow(
 
 		const windowRef: HTMLDivElement = thisRef.current;
 		const windowBody: HTMLDivElement = windowBodyRef.current;
+		const statusbar: HTMLDivElement = statusBarRef.current as HTMLDivElement;
 
 		const windowNodes = windowRef.querySelectorAll<HTMLDivElement>("div>div.title-bar");
 		if (windowNodes.length <= 0)
@@ -170,9 +183,11 @@ function AppWindow(
 		spaceTaken += getMarginPaddingBorderVertical(windowBodyDivStyles.padding) * 2;
 		spaceTaken += getMarginPaddingBorderVertical(windowBodyDivStyles.borderWidth) * 2;
 
+		spaceTaken += statusbar.getBoundingClientRect().height;
+
 		const newHeight = freeSpace - spaceTaken;
 
-		windowBody.style.height = newHeight+"px";
+		windowBody.style.height = newHeight + "px";
 	}
 
 	const checkInitialHeight = (): void => {
@@ -183,16 +198,32 @@ function AppWindow(
 		const checkWidth = thisRef.current.getBoundingClientRect().width < minWidth;
 
 		if (checkHeight || checkWidth) {
-			thisRef.current.style.height = minHeight+"px";
-			thisRef.current.style.width = minWidth+"px";
+			thisRef.current.style.height = minHeight + "px";
+			thisRef.current.style.width = minWidth + "px";
 		}
+	}
+
+	const isInsideDesktopBounds = (
+		{
+			x = desktopBounds.x,
+			y = desktopBounds.y,
+			width = desktopBounds.width,
+			height = desktopBounds.height
+		}
+	): boolean => {
+		const leftCondition = x >= desktopBounds.x;
+		const topCondition = y >= desktopBounds.y;
+		const rightCondition = width <= (desktopBounds.width + desktopBounds.x);
+		const bottomCondition = height <= desktopBounds.height + desktopBounds.y;
+
+		return topCondition && rightCondition && bottomCondition && leftCondition;
 	}
 
 	return (
 		<div
 			className="window absolute box-border"
 			ref={thisRef}
-			style={ defaultHeight === undefined && defaultWidth === undefined ? {} : {
+			style={defaultHeight === undefined && defaultWidth === undefined ? {} : {
 				width: defaultWidth + "px",
 				height: defaultHeight + "px"
 			}}
@@ -200,10 +231,12 @@ function AppWindow(
 			<div className="resizer-container box-border">
 				<Resizer onResize={handleResize}></Resizer>
 				<AppWindowTitleBar onDrag={handleDrag}>{titleBarText}</AppWindowTitleBar>
-				<div className="window-body h-full overflow-y-auto box-border" ref={windowBodyRef}>
+				<div className="window-body overflow-y-auto box-border" ref={windowBodyRef}>
 					{children}
 				</div>
-				{statusBarElement}
+				<div ref={statusBarRef}>
+					{statusBarElement}
+				</div>
 			</div>
 		</div>
 	);

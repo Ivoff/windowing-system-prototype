@@ -82,3 +82,7 @@
   height: inherit;
   position: relative;
 }
+
+.no-select {
+  user-select: none;
+}

@@ -1,6 +1,17 @@
-import React, {ReactElement} from "react";
+import React, {ChangeEvent, ReactElement} from "react";
 
 function AppNavBar(): ReactElement {
+	const handleOnChangeSelect = (event: ChangeEvent<HTMLSelectElement>) => {
+		for (let i = 0; i < document.styleSheets.length; i += 1) {
+			var currentStyleSheet = document.styleSheets[i];
+			var currentElement = currentStyleSheet.ownerNode as Element
+
+			if (currentElement.id) {
+				currentStyleSheet.disabled = currentElement.id !== event.target.value;
+			}
+		}
+	}
+
 	return (
 		<div className="window">
 			<div className="window-body">
@@ -13,10 +24,19 @@ function AppNavBar(): ReactElement {
 						</div>
 					</div>
 				</div>
-				<fieldset>
-					<button>Hot</button>
-					<button>New</button>
-					<button>Top</button>
+				<fieldset className="flex justify-between">
+					<div>
+						<button>Hot</button>
+						<button>New</button>
+						<button>Top</button>
+					</div>
+					<div>
+						<select name="" id="" onChange={handleOnChangeSelect} defaultValue={"98_css"}>
+							<option value="98_css">Windows 98</option>
+							<option value="xp_css">Windows XP</option>
+							<option value="7_css">Windows 7</option>
+						</select>
+					</div>
 				</fieldset>
 			</div>
 		</div>
