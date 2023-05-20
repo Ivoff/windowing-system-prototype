@@ -166,6 +166,10 @@ html, body, div#root {
   box-sizing: border-box;
 }
 
+.inline-block {
+  display: inline-block;
+}
+
 .flex {
   display: flex;
 }
@@ -178,8 +182,76 @@ html, body, div#root {
   flex-grow: 1;
 }
 
+.grow-0 {
+  flex-grow: 0;
+}
+
+.basis-1\/6 {
+  flex-basis: 16.666667%;
+}
+
+.basis-2\/4 {
+  flex-basis: 50%;
+}
+
+.basis-1\/4 {
+  flex-basis: 25%;
+}
+
+.basis-1\/12 {
+  flex-basis: 8.333333%;
+}
+
+.basis-4 {
+  flex-basis: 1rem;
+}
+
+.basis-10 {
+  flex-basis: 2.5rem;
+}
+
+.basis-20 {
+  flex-basis: 5rem;
+}
+
+.basis-40 {
+  flex-basis: 10rem;
+}
+
+.basis-14 {
+  flex-basis: 3.5rem;
+}
+
+.basis-11 {
+  flex-basis: 2.75rem;
+}
+
+.basis-32 {
+  flex-basis: 8rem;
+}
+
+.basis-80 {
+  flex-basis: 20rem;
+}
+
+.basis-72 {
+  flex-basis: 18rem;
+}
+
+.basis-60 {
+  flex-basis: 15rem;
+}
+
+.flex-row-reverse {
+  flex-direction: row-reverse;
+}
+
 .flex-col {
   flex-direction: column;
+}
+
+.justify-center {
+  justify-content: center;
 }
 
 .justify-between {
@@ -211,7 +283,25 @@ html, body, div#root {
   padding: 0.25rem;
 }
 
-.text-xl {
-  font-size: 1.25rem;
+.px-1 {
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+
+.px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.align-middle {
+  vertical-align: middle;
+}
+
+.text-lg {
+  font-size: 1.125rem;
   line-height: 1.75rem;
+}
+
+.font-bold {
+  font-weight: 700;
 }
