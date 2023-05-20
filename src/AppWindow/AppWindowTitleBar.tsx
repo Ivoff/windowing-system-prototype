@@ -32,8 +32,10 @@ function AppWindowTitleBar({ onDrag, children }: AppWindowTitleBarProps): ReactE
 	}
 
 	const handleMouseMove = (event: MouseEvent) => {
-		if (onDrag)
+		if (onDrag) {
+			window.getSelection()?.empty();
 			onDrag(event.movementX, event.movementY);
+		}
 	}
 
 	return (

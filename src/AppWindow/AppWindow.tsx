@@ -2,10 +2,10 @@ import React, {ReactElement, ReactNode, useEffect, useRef} from "react";
 import AppWindowTitleBar from "./AppWindowTitleBar";
 import Resizer from "./Resizer";
 import {Direction} from "./Resizer";
+import ChildrenToArray from "../Utils/ChildrenToArray";
+import WindowLayout from "../Utils/WindowComponentsExtractor";
 
 type AppWindowProps = {
-	titleBarText?: string,
-	statusBarElement?: ReactNode,
 	defaultWidth?: number,
 	defaultHeight?: number,
 	minWidth?: number,
@@ -24,8 +24,6 @@ type DesktopBounds = {
 
 function AppWindow(
 	{
-		titleBarText,
-		statusBarElement,
 		defaultHeight = undefined,
 		defaultWidth = undefined,
 		minHeight = 200,
@@ -36,6 +34,7 @@ function AppWindow(
 	const thisRef = useRef<HTMLDivElement>(null);
 	const windowBodyRef = useRef<HTMLDivElement>(null);
 	const statusBarRef = useRef<HTMLDivElement>(null);
+	const windowComponents = WindowLayout(children);
 	let desktopBounds: DesktopBounds;
 
 	useEffect(() => {
@@ -48,9 +47,16 @@ function AppWindow(
 		if (!thisRef.current)
 			return;
 
-		const {x, y} = thisRef.current.getBoundingClientRect();
-		thisRef.current.style.left = x + movementX + "px";
-		thisRef.current.style.top = y + movementY + "px";
+		const {x, y, height, width} = thisRef.current.getBoundingClientRect();
+
+		const newLeft = x + movementX;
+		const newTop = y + movementY;
+
+		if (!isInsideDesktopBounds({x: newLeft, y: newTop, height: newTop + height, width: newLeft + width}))
+			return;
+
+		thisRef.current.style.left = newLeft + "px";
+		thisRef.current.style.top = newTop + "px";
 	}
 
 	const handleResize = (direction: string, movementX: number, movementY: number) => {
@@ -230,12 +236,13 @@ function AppWindow(
 		>
 			<div className="resizer-container box-border">
 				<Resizer onResize={handleResize}></Resizer>
-				<AppWindowTitleBar onDrag={handleDrag}>{titleBarText}</AppWindowTitleBar>
+
+				<AppWindowTitleBar onDrag={handleDrag}>{windowComponents.titleBarElement}</AppWindowTitleBar>
 				<div className="window-body overflow-y-auto box-border" ref={windowBodyRef}>
-					{children}
+					{windowComponents.windowContentElement}
 				</div>
 				<div ref={statusBarRef}>
-					{statusBarElement}
+					{windowComponents.statusBarElement}
 				</div>
 			</div>
 		</div>

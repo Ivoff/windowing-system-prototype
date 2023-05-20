@@ -9,18 +9,15 @@ function App(): ReactElement {
 		<div className="flex flex-col h-full">
 			<AppNavBar></AppNavBar>
 			<AppDesktop>
-				<AppWindow
-					titleBarText="drag window title bar"
-					statusBarElement={
-						<AppStatusBar>
-							<p className="status-bar-field">Hello</p>
-						</AppStatusBar>
-					}
-				>
+				<AppWindow>
+					<p>drag window title bar</p>
 					<div className="flex justify-between">
 						<button>Yes</button>
 						<button>No</button>
 					</div>
+					<AppStatusBar>
+						<p className="status-bar-field">Hello</p>
+					</AppStatusBar>
 				</AppWindow>
 				<AppWindow>
 					<div className="sunken-panel p-1">

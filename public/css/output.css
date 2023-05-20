@@ -162,22 +162,6 @@ html, body, div#root {
   position: absolute;
 }
 
-.relative {
-  position: relative;
-}
-
-.mt-8 {
-  margin-top: 2rem;
-}
-
-.mb-8 {
-  margin-bottom: 2rem;
-}
-
-.mt-auto {
-  margin-top: auto;
-}
-
 .box-border {
   box-sizing: border-box;
 }
@@ -188,10 +172,6 @@ html, body, div#root {
 
 .h-full {
   height: 100%;
-}
-
-.flex-none {
-  flex: none;
 }
 
 .grow {
@@ -234,8 +214,4 @@ html, body, div#root {
 .text-xl {
   font-size: 1.25rem;
   line-height: 1.75rem;
-}
-
-.font-bold {
-  font-weight: 700;
 }
